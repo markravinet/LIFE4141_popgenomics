@@ -11,7 +11,7 @@
 
 
 
-<title>Practical 2</title>
+<title>Practical 3</title>
 
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -280,7 +280,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Practical 2</h1>
+<h1 class="title toc-ignore">Practical 3</h1>
 
 </div>
 
@@ -431,7 +431,7 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <div id="versions" class="tab-pane fade">
 
 <p>
-These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/practical2.Rmd</code>) and HTML (<code>docs/practical2.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/practical3.Rmd</code>) and HTML (<code>docs/practical3.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -460,7 +460,7 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/markravinet/LIFE4141_popgenomics/blob/c4fb4fefcdb5124b4c13f73d705ea7710e77f591/analysis/practical2.Rmd" target="_blank">c4fb4fe</a>
+<a href="https://github.com/markravinet/LIFE4141_popgenomics/blob/c4fb4fefcdb5124b4c13f73d705ea7710e77f591/analysis/practical3.Rmd" target="_blank">c4fb4fe</a>
 </td>
 <td>
 markravinet
@@ -472,57 +472,6 @@ markravinet
 Fix errors
 </td>
 </tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/markravinet/LIFE4141_popgenomics/86e53b9bccdbc1f3a126e875ff641f2b4a283341/docs/practical2.html" target="_blank">86e53b9</a>
-</td>
-<td>
-markravinet
-</td>
-<td>
-2021-11-25
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/markravinet/LIFE4141_popgenomics/7fdb401f8f219fcdade613bc2b5a83423d6e7859/docs/practical2.html" target="_blank">7fdb401</a>
-</td>
-<td>
-markravinet
-</td>
-<td>
-2021-11-25
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/markravinet/LIFE4141_popgenomics/blob/f3e4f707e86181d205c7ee60197a286d93d5ddae/analysis/practical2.Rmd" target="_blank">f3e4f70</a>
-</td>
-<td>
-markravinet
-</td>
-<td>
-2021-11-25
-</td>
-<td>
-Publish initial files for my project
-</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -530,117 +479,99 @@ Publish initial files for my project
 </div>
 </div>
 </div>
-<div id="inferring-selection-in-the-genome---part-1" class="section level1">
-<h1>Inferring selection in the genome - part 1</h1>
-<p>There are many different ways to detect regions under divergent selection. In this tutorial, we are going to compute three of them in sliding genomic windows: - pi, a measure of genetic variation - <em>F</em><sub>ST</sub> - a measure of genomic differentiation - <em>d</em><sub>XY</sub> - a measure of absolute divergence</p>
-<p>Note that dxy <em>d</em><sub>XY</sub> and pi require monomorphic sites to be present in the dataset, whereas <em>F</em><sub>ST</sub> is only computed on bi-allelic sites. It is thus important to filter out indels and multi-allelic sites and to keep monomorphic sites (i.e. do not apply an maf filter).</p>
-<p>As SNP <em>F</em><sub>ST</sub> values are very noisy, it is also better to compute <em>F</em><sub>ST</sub> estimates for entire regions. Selection is expected to not only affect a single SNP and the power to detect a selective sweep is thus higher for genomic regions. How large the genomic region should be depends on the SNP density, how fast linkage disequilibrium decays, how recent the sweep is and other factors. It is thus advisable to try different window sizes. Here, we will use 100 kb windows. An alternative is to use windows of fixed number of sites instead of fixed size.</p>
-<div id="setting-up" class="section level3">
-<h3>Setting up</h3>
-<p>In order to calculate these statistics, we will use a set of custom <code>python</code> scripts written by <a href="https://simonmartinlab.org/">Simon Martin</a> which you can download <a href="https://github.com/simonhmartin/genomics_general">here</a>. We will spend a few moments learning how to install these scripts as we will use them here and also in the practical session later today too. Thankfully, they are very easy to set up, we can download and install them using <code>git</code>. We do this like so:</p>
-<pre class="shell"><code># move to home directory
-cd ~
-# use git clone to clone the genomics_general github repo
-git clone https://github.com/simonhmartin/genomics_general.git</code></pre>
-<p>This will download the scripts into a folder in your home directory. You can look inside to see all the different scripts available. However, what we really want to do is to make sure that they are accessible wherever we are on the cluster. We can do that easily too. We simply add the directory of the scripts to the <code>$PATH</code> variable like so:</p>
-<pre class="shell"><code># create a custom path
-export PATH=$PATH:$HOME/genomics_general</code></pre>
-<p>Now if you try typing the following into the shell, you should see the help dialogue:</p>
-<pre class="shell"><code>popgenWindows.py --help</code></pre>
-<p>However, the <code>$PATH</code> variable we created just now is temporary. If you log off, it will be gone. So we can echo it to our <code>.bashrc</code> file to make sure it is loaded each time we start a new shell session. We do that like so</p>
-<pre class="shell"><code>echo &quot;# create a custom path&quot; &gt; ~/.bashrc
-echo &quot;export PATH=$PATH:$HOME/genomics_general:$HOME/genomics_general/VCF_processing&quot; &gt; ~/.bashrc</code></pre>
-<p>Now the scripts are easily callable!</p>
-</div>
-<div id="converting-the-input-files" class="section level3">
-<h3>Converting the input files</h3>
-<p>First, we will convert a <code>vcf</code> file into Simon Martin’s <code>geno</code> file format. To do that we need to use the <code>parseVCF.py</code> script. The <code>geno</code> file is very straightforward - it is essentially a genotype matrix and easy to create.</p>
-<p>We will convert a vcf with data from 105 individuals into a geno file that we can process downstream. First lets set up a directory to work in:</p>
+<div id="inferring-selection-in-the-genome---part-2" class="section level1">
+<h1>Inferring selection in the genome - part 2</h1>
+<div id="getting-access-to-a-larger-dataset" class="section level4">
+<h4>Getting access to a larger dataset</h4>
+<p>Remember that above, we performed our phasing on a drastically reduced dataset in order to complete our analysis in time. In order to get the real dataset, we should do the following.</p>
 <pre class="shell"><code>cd ~
-mkdir genome_scan
-cd genome_scan</code></pre>
-<p>Then we copy over our data into this directory we have just created:</p>
-<pre class="shell"><code>cp /shared/mark/genome_scan/vcf/sparrows_chr8_subset.vcf.gz ./</code></pre>
-<p>Before we go further with converting the file, it is worth looking at it in a bit more detail to get some idea of what it contains:</p>
-<pre class="shell"><code># what individuals?
-bcftools query -l sparrows_chr8_subset.vcf.gz
-# how many individuals?
-bcftools query -l sparrows_chr8_subset.vcf.gz | wc -l
-# how many variants?
-bcftools index sparrows_chr8_subset.vcf.gz
-bcftools index -n sparrows_chr8_subset.vcf.gz</code></pre>
-<p>We can very easily convert the file. We do so using the <code>parseVCF.py</code> script.</p>
-<pre class="shell"><code>parseVCF.py -i sparrows_chr8_subset.vcf.gz -o sparrows_chr8_subset.geno</code></pre>
-<p>This should take a few seconds to run and then we can have a look at the input:</p>
-<pre class="shell"><code>head sparrows_chr8_subset.geno | cut -f 1-10 | column -t</code></pre>
-<p>Essentially this is a genotype matrix for each of our individuals. It is also a good idea to compress this file with <code>gzip</code>. This is also really straightforward.</p>
-<pre class="shell"><code>gzip sparrows_chr8_subset.geno</code></pre>
-<p>Now we are ready to analyse the data!</p>
+mkdir rehh
+cd rehh
+cp /shared/mark/genome_scan/vcf/[hb]*.vcf.gz .</code></pre>
+<p>These are the full vcfs for the house and bactrianus datasets that we can read into <code>R</code> to perform our genome scan with.</p>
 </div>
-<div id="performing-the-analysis" class="section level3">
-<h3>Performing the analysis</h3>
-<p>We want to calculate <em>d</em><sub>XY</sub>, <em>F</em><sub>ST</sub> and pi from the house sparrow and the bactrianus sparrow from this dataset. We can do this very easily, but first it will help if we create a population file that we can give to the script so that we don’t need to manually input each of the sample names. We can do this fairly easily using <code>grep</code></p>
-<pre class="shell"><code># generate all the sample names
-bcftools query -l sparrows_chr8_subset.vcf.gz &gt; samples
-# get the bactrianus sparrow samples
-grep &quot;^[KP][Ad]&quot; samples &gt; bactrianus
-# get the house sparrow samples
-grep -v &quot;^[KP][Ad]*&quot; samples &gt; house</code></pre>
-<p>However, the population file also needs a column with the population denoted in it. So we can generate this with <code>awk</code>.</p>
-<pre class="shell"><code>awk &#39;{print $1&quot;\tbac&quot;}&#39; bactrianus &gt; pop_file
-awk &#39;{print $1&quot;\thouse&quot;}&#39; house &gt;&gt; pop_file
-# now look at the pop_file
-cat pop_file</code></pre>
-<p>With this, we are ready to perform our analyses.</p>
-<pre class="shell"><code>popgenWindows.py -g sparrows_chr8_subset.geno.gz -o div_stats.csv \
-   -f phased -w 100000 -m 10 -s 25000 \
-   -p house -p bac \
-   --popsFile pop_file \
-   --writeFailedWindow</code></pre>
-<p>Some notes on the options here:</p>
-<ul>
-<li><code>-g</code> the input geno file</li>
-<li><code>-o</code> the output stats file</li>
-<li><code>-f</code> the format of the input file - here phased simply means we have both sites (i.e. it is diploid)</li>
-<li><code>-w</code> the size of the window in bp</li>
-<li><code>-m</code> the minimum number of sites within a window - here set to 10 to get an output</li>
-<li><code>-s</code> the size of the step for the sliding window - here it is 25 Kb.</li>
-<li><code>-p</code> the population names to compare from the pops file.</li>
-<li><code>--popsFile</code> the name of the pops file</li>
-<li><code>--writeFailedWindow</code> write to the output even if the window does not meet filtering requirements</li>
-</ul>
-<p>This will run very quickly and write out our results after printing a dialogue to the screen. We can then use <code>head</code> to examine the results. Of course it is worth remembering here that this is just a dummy dataset that we used to run the analyses quickly. In the next section, when we visualise this in <code>R</code>, we will use a real dataset!</p>
-</div>
-<div id="visualising-the-results" class="section level3">
-<h3>Visualising the results</h3>
-<p>The real analysis we will visualise in this step was conducted on 413 individuals from across the <em>Passer</em> sparrow distribution. This includes different species but here we will use a comparison of <em>d</em><sub>XY</sub>, <em>F</em><sub>ST</sub> and pi from house sparrows in Europe versus bactrianus sparrows from Kazahkstan and Iran.</p>
-<p>We can get the real data like so:</p>
-<pre class="shell"><code>cd genome_scan
-cp /shared/mark/genome_scan/outputs/house_bac_div_stats.csv</code></pre>
-<p>Now we will turn to <code>R</code> to visualise our data. The first thing we need to do is prepare the <code>R</code> environment.</p>
-<pre class="r"><code># clear the r environment
+<div id="running-an-analysis-with-rehh" class="section level3">
+<h3>Running an analysis with rehh</h3>
+<p>To compute and detect regions with extended haplotype lengths, we will use the excellent <code>rehh</code> R package. For more information see the <a href="https://cran.r-project.org/web/packages/rehh/vignettes/rehh.html">vignette</a>. <code>rehh</code> is well maintained, continually updated and has <a href="https://cran.r-project.org/web/packages/rehh/vignettes/rehh.html">a very informative tutorial</a> which I recommend you also check out.</p>
+<p>To run <code>rehh</code> and perform our analyses, we need to run things in <code>R</code>. You can either download the data from <a href="https://github.com/speciationgenomics">our github</a> and run it locally on your own machine, or we can use our <code>RStudio</code> server. Once <code>R</code> is running, we are ready to go!</p>
+<div id="setting-up-the-r-environment" class="section level4">
+<h4>Setting up the R environment</h4>
+<p>The first thing we need to do is clear our <code>R</code> environment and load the packages we need. Like so:</p>
+<pre class="r"><code># clear environment
 rm(list = ls())
-# load the tidyverse library
+# load packages
+library(rehh)
 library(tidyverse)</code></pre>
-<p>Then with this done, we can read in the data.</p>
-<pre class="r"><code>infile &lt;- &quot;./house_bac_div_stats.csv&quot;
-house_bac &lt;- read_csv(infile)</code></pre>
-<p>We can now take a look at the <code>house_bac</code> dataframe in a bit more detail. Note that it is a <code>tibble</code> so that we can easily get a quick summary of the data. This contains estimates of pi, <em>d</em><sub>XY</sub> and <em>F</em><sub>ST</sub> in 100Kb windows with a 25Kb step along our chromosome of interest (chromosome 8 here).</p>
-<p>Let’s plot our statistics to get a better idea of what is going on here. We will start with <em>F</em><sub>ST</sub>:</p>
-<pre class="r"><code># fst
-ggplot(house_bac, aes(mid, fst_bac_house)) + geom_line()</code></pre>
-<p>Next we will look at <em>d</em><sub>XY</sub></p>
-<pre class="r"><code># dxy
-ggplot(house_bac, aes(mid, dxy_bac_house)) + geom_line()</code></pre>
-<p>Clearly there is something going on at the centre of the chromosome here. We should also look at the estimates of pi to see if there is anything we can learn from that too. Since we want to plot pi from both species on the same plot, it requires a bit more leg work. First we need to use the <code>gather</code> function to reshape the data so that we can plot it.</p>
-<pre class="r"><code># pi
-# first gather the data
-pi &lt;- house_bac %&gt;%
-  select(mid, contains(&quot;pi&quot;)) %&gt;%
-  gather(key = &quot;species&quot;, value = &quot;pi&quot;, -mid)
-# then plot it
-ggplot(pi, aes(mid, pi, colour = species)) + geom_line()</code></pre>
-<p>pi also shows a large drop in the level of diversity at the middle of the chromosome. This suggests an area of reduced recombination, most likely caused by the presence of the centromere. This can also explain the largest <em>F</em><sub>ST</sub> peak present in the data. This suggests we should try an alternative approach.</p>
+</div>
+</div>
+<div id="reading-in-data-from-vcfs" class="section level3">
+<h3>Reading in data from vcfs</h3>
+<p>A nice new addition to <code>rehh</code> is the ability to read in (and also filter) your data from a vcf. However, it is still quite tricky to split up individuals so instead we will read in a vcf for each population. We read in data using the <code>data2haplohh</code> function:</p>
+<pre class="r"><code># read in data for each species
+# house
+house_hh &lt;- data2haplohh(hap_file = &quot;./rehh/house_chr8.vcf.gz&quot;,
+                   polarize_vcf = FALSE)
+# bactrianus
+bac_hh &lt;- data2haplohh(hap_file = &quot;./rehh/bac_chr8.vcf.gz&quot;,
+                         polarize_vcf = FALSE)</code></pre>
+<p>This will take a few moments but once the commands are run, we will have read in our data. It is really important that we set <code>polarize_vcf</code> to <code>FALSE</code> because we have not used an outgroup genome to set our alleles as derived or ancestral. <strong>NB. Some plots and functions in <code>rehh</code> will still refer to ancestral and derived even if you use this option</strong>. Instead <code>rehh</code> will use the minor and major alleles (in terms of frequency) from our data.</p>
+<p>Next, we will filter our data on a <strong>minor allele frequency</strong> or <strong>MAF</strong>. This is really simple in <code>rehh</code> with the <code>subset</code> function:</p>
+<pre class="r"><code># filter on MAF - here 0.05
+house_hh_f &lt;- subset(house_hh, min_maf = 0.05)
+bac_hh_f &lt;- subset(bac_hh, min_maf = 0.05)</code></pre>
+<p>This will remove some sites - and we’ll be ready to run our haplotype scans.</p>
+</div>
+<div id="performing-a-haplotype-genome-scan---xpehh" class="section level3">
+<h3>Performing a haplotype genome scan - <em>xpEHH</em></h3>
+<p>Before we can calculate the statistic we are interested in <em>xpEHH</em> - we need to calculate <em>iES</em> statistics. Luckily this is really easy using the <code>rehh</code> function <code>scan_hh</code>.</p>
+<pre class="r"><code># perform scans
+house_scan &lt;- scan_hh(house_hh_f, polarized = FALSE)
+bac_scan &lt;- scan_hh(bac_hh_f, polarized = FALSE)</code></pre>
+<p>Next we will calculate <em>xpEHH</em> which is the cross-population <em>EHH</em> test. This is essentially a test for the probability that if we randomly sampled haplotypes from different populations, we would get different haplotypes. Again, <code>rehh</code> makes this simple with the <code>ies2xpehh</code> function.</p>
+<pre class="r"><code># perform xp-ehh
+house_bac &lt;- ies2xpehh(bac_scan, house_scan,
+                       popname1 = &quot;bactrianus&quot;, popname2 = &quot;house&quot;,
+                       include_freq = T)</code></pre>
+<p>Here we provide the names of our previous <em>iES</em> scans (<code>bac_scan</code> and <code>house_scan</code>). We can also provide the function with the names of our populations and finally, if we set <code>include_freq</code> to <code>TRUE</code>, we get the frequencies of alleles in our output, which might be useful if we want to see how selection is acting on a particular position.</p>
+<p>Next, we can plot the <em>xpEHH</em> values, like so:</p>
+<pre class="r"><code># plot
+ggplot(house_bac, aes(POSITION, XPEHH_bactrianus_house)) + geom_point()</code></pre>
+<p>In this plot, highly negative values suggest selection in population 2 (house in this case) whereas positive values indicate selection in population 1. Alternatively, like with <em>iHS</em>, we could plot the log <em>P</em> values.</p>
+<pre class="r"><code>ggplot(house_bac, aes(POSITION, LOGPVALUE)) + geom_point()</code></pre>
+</div>
+<div id="examining-haplotype-structure-around-a-target-of-selection" class="section level3">
+<h3>Examining haplotype structure around a target of selection</h3>
+<p>One other nice feature of <code>rehh</code> is that we can examine haplotype structure around SNPs we think might be under selection. Before we do that, we need to identify the SNP in our dataset with the strongest evidence of being an <em>xpEHH</em> outlier.</p>
+<pre class="r"><code># find the highest hit
+hit &lt;- house_bac %&gt;% arrange(desc(LOGPVALUE)) %&gt;% top_n(1)
+# get SNP position
+x &lt;- hit$position</code></pre>
+<p>Here we also set the position of our putative selection SNP as the object <code>x</code>. This is because we need to identify where it occurs in our haplotype objects - unfortunately we cannot use the position for this. In the code below, we find the marker id for both our datasets.</p>
+<pre class="r"><code>marker_id_h &lt;- which(house_hh_f@positions == x)
+marker_id_b &lt;- which(bac_hh_f@positions == x)</code></pre>
+<p>Now we are ready to plot the bifurcation of haplotypes around our site of selection. We do this like so:</p>
+<pre class="r"><code>house_furcation &lt;- calc_furcation(house_hh_f, mrk = marker_id_h)
+bac_furcation &lt;- calc_furcation(bac_hh_f, mrk = marker_id_b)</code></pre>
+<p>We can also plot both of these to have a look at them:</p>
+<pre class="r"><code>plot(house_furcation, xlim = c(19.18E+6, 19.22E+6))
+plot(bac_furcation, xlim = c(19.18E+6, 19.22E+6))</code></pre>
+<p>Calculating the furcation pattern also makes it possible to calculate the haplotype length around our signature of selection.</p>
+<pre class="r"><code>house_haplen &lt;- calc_haplen(house_furcation)
+bac_haplen &lt;- calc_haplen(bac_furcation)</code></pre>
+<p>With the haplotype length calculated, we can now plot this to see how haplotype structure differs between our two populations.</p>
+<pre class="r"><code>plot(house_haplen)
+plot(bac_haplen)</code></pre>
+<p>Here we can see the blue haplotype is much larger around this target and is also more numerous in the European house sparrow.</p>
+</div>
+<div id="writing-out-the-data-for-later-used" class="section level3">
+<h3>Writing out the data for later used</h3>
+<p>Finally, before we move on to the last tutorial, we are going to write out the data. We’ll also make the column names all smaller letters, to make downstream scripting a bit easier.</p>
+<p>Use the following code to achieve this:</p>
+<pre class="r"><code># write out house bactrianus xpEHH
+house_bac &lt;- tbl_df(house_bac)
+colnames(house_bac) &lt;- tolower(colnames(house_bac))
+write_tsv(house_bac, &quot;./house_bac_xpEHH.tsv&quot;)</code></pre>
+<p>In the last tutorial, we’ll use <code>R</code> to identify genes that are close to our outlier SNPs.</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
