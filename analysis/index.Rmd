@@ -11,5 +11,6 @@ editor_options:
 Welcome to the website for our LIFE4141 population genomics practical. Today we are going to:
 
 1. Perform a PCA on some haplochromine cichlid data
-2. [Carry out a sliding window-analysis of FST and DXY on a dataset of Passer sparrows](practical2.html)
-3. Calculate haplotype homozygosity statistics between two Passer sparrow species.
+2. [Carry out a sliding window-analysis of *F*<sub>ST</sub> and *d*<sub>XY</sub> on a dataset of Passer sparrows](practical2.html)
+3. [Calculate haplotype homozygosity statistics between two Passer sparrow species](practical3.html)
+4. [Use this pairwise analysis to identify candidate genes in the genome](practical4.html)

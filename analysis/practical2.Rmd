@@ -1,5 +1,5 @@
 ---
-title: "Home"
+title: "Practical 2"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
@@ -153,7 +153,7 @@ We can get the real data like so:
 
 ```shell
 cd genome_scan
-cp /shared/mark/genome_scan/output/house_bac_div_stats.csv
+cp /shared/mark/genome_scan/outputs/house_bac_div_stats.csv
 ```
 
 Now we will turn to `R` to visualise our data. The first thing we need to do is prepare the `R` environment.
