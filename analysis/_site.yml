@@ -1,7 +1,7 @@
-name: "LIFE4141_popgenomics"
+name: LIFE4141_popgenomics
 output_dir: ../docs
 navbar:
-  title: "LIFE4141_popgenomics"
+  title: LIFE4141_popgenomics
   left:
   - text: Home
     href: index.html
@@ -9,6 +9,10 @@ navbar:
     href: about.html
   - text: License
     href: license.html
+  right:
+  - icon: fa-github
+    text: Source code
+    href: https://github.com/markravinet/LIFE4141_popgenomics
 output:
   workflowr::wflow_html:
     toc: yes
