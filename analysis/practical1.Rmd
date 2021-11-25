@@ -4,6 +4,12 @@ layout: archive
 permalink: /pca/
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
 # Investigating population structure with PCA
 
 The first thing we will do is investigate population structure using [principal components analysis](https://en.wikipedia.org/wiki/Principal_component_analysis). Examining population structure can give us a great deal of insight into the history and origin of populations. Model-free methods for examining population structure and ancestry, such as principal components analysis are extremely popular in population genomic research. This is because it is typically simple to apply and relatively easy to interpret. 
@@ -96,24 +102,23 @@ Next we turn to R to plot the analysis we have produced!
 
 First load the `tidyverse` package and ensure you have moved the `plink` output into the working directory you are operating in. You may want to set up an RStudio Project to manage this analysis. See [here](https://speciationgenomics.github.io/more_advanced_R/) for a guide on how to do this.
 
-``` r
+```{r load, eval = FALSE, echo = TRUE}
 # load tidyverse package
 library(tidyverse)
 ```
 
 Then we will use a combination of `readr` and the standard `scan` function to read in the data.
 
-``` r
-# read in data
-pca <- read_table2("./cichlids.eigenvec", col_names = FALSE)
-eigenval <- scan("./cichlids.eigenval")
+```{r read, eval = TRUE, echo = TRUE}
+pca <- read_table("./data/cichlids.eigenvec", col_names = FALSE)
+eigenval <- scan("./data/cichlids.eigenval")
 ```
 
 #### Cleaning up the data
 
 Unfortunately, we need to do a bit of legwork to get our data into reasonable shape. First we will remove a nuisance column (`plink` outputs the individual ID twice). We will also give our `pca` data.frame proper column names.
 
-``` r
+```{r clean, eval = TRUE, echo = TRUE}
 # sort out the pca data
 # remove nuisance column
 pca <- pca[,-1]
@@ -124,7 +129,7 @@ names(pca)[2:ncol(pca)] <- paste0("PC", 1:(ncol(pca)-1))
 
 Next we can add a species, location and if required, a species x location vector. We will do this using the R version of `grep`. We then use `paste0` to combine the columns.
 
-``` r
+```{r fix_names, eval = TRUE, echo = TRUE}
 # sort out the individual species and pops
 # spp
 spp <- rep(NA, length(pca$ind))
@@ -140,7 +145,7 @@ spp_loc <- paste0(spp, "_", loc)
 
 With these variables created, we can remake our data.frame like so. Note the use of `as.tibble` to ensure that we make a tibble for easy summaries etc.
 
-``` r
+```{r tibble, eval = TRUE, echo = TRUE}
 # remake data.frame
 pca <- as.tibble(data.frame(pca, spp, loc, spp_loc))
 ```
@@ -149,14 +154,14 @@ pca <- as.tibble(data.frame(pca, spp, loc, spp_loc))
 
 Now that we have done our housekeeping, we have everything in place to actually visualise the data properly. First we will plot the eigenvalues. It is quite straightforward to translate these into percentage variance explained (although note, you could just plot these raw if you wished).
 
-``` r
+```{r calc_pve, eval = TRUE, echo = TRUE}
 # first convert to percentage variance explained
-pve <- data.frame(PC = 1:16, pve = eigenval/sum(eigenval)*100)
+pve <- data.frame(PC = 1:20, pve = eigenval/sum(eigenval)*100)
 ```
 
 With that done, it is very simple to create a bar plot showing the percentage of variance each principal component explains.
 
-``` r
+```{r plot_scree, eval = TRUE, echo = TRUE}
 # make plot
 a <- ggplot(pve, aes(PC, pve)) + geom_bar(stat = "identity")
 a + ylab("Percentage variance explained") + theme_light()
@@ -166,14 +171,14 @@ a + ylab("Percentage variance explained") + theme_light()
 
 Cumulatively, they explain 100% of the variance but PC1, PC2 and possible PC3 together explain about 30% of the variance. We could calculate this with the `cumsum` function, like so:
 
-``` r
+```{r cumsum, eval = TRUE, echo = TRUE}
 # calculate the cumulative sum of the percentage variance explained
 cumsum(pve$pve)
 ```
 
 Next we move on to actually plotting our PCA. Given the work we did earlier to get our data into shape, this doesn't take much effort at all.
 
-``` r
+```{r plot_pca, eval = TRUE, echo = TRUE}
 # plot pca
 b <- ggplot(pca, aes(PC1, PC2, col = spp, shape = loc)) + geom_point(size = 3)
 b <- b + scale_colour_manual(values = c("red", "blue"))
