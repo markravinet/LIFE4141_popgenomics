@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Practical 1</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">LIFE4141_popgenomics</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/markravinet/LIFE4141_popgenomics">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Practical 1</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-11-25
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>LIFE4141_popgenomics/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommarkravinetLIFE4141popgenomicstree9cfe326811b194be5393e28106d2c3622fd841a0targetblank9cfe326a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/markravinet/LIFE4141_popgenomics/tree/9cfe326811b194be5393e28106d2c3622fd841a0" target="_blank">9cfe326</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcommarkravinetLIFE4141popgenomicstree9cfe326811b194be5393e28106d2c3622fd841a0targetblank9cfe326a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/markravinet/LIFE4141_popgenomics/tree/9cfe326811b194be5393e28106d2c3622fd841a0" target="_blank">9cfe326</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rproj.user/
+
+Unstaged changes:
+    Deleted:    analysis/practical2.md
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/practical1.Rmd</code>) and HTML (<code>docs/practical1.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/markravinet/LIFE4141_popgenomics/blob/9cfe326811b194be5393e28106d2c3622fd841a0/analysis/practical1.Rmd" target="_blank">9cfe326</a>
+</td>
+<td>
+markravinet
+</td>
+<td>
+2021-11-25
+</td>
+<td>
+Add all markdown
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="investigating-population-structure-with-pca" class="section level1">
+<h1>Investigating population structure with PCA</h1>
+<p>The first thing we will do is investigate population structure using <a href="https://en.wikipedia.org/wiki/Principal_component_analysis">principal components analysis</a>. Examining population structure can give us a great deal of insight into the history and origin of populations. Model-free methods for examining population structure and ancestry, such as principal components analysis are extremely popular in population genomic research. This is because it is typically simple to apply and relatively easy to interpret.</p>
+<p>Essentially, PCA aims to identify the main axes of variation in a dataset with each axis being independent of the next (i.e. there should be no correlation between them). The first component summarizes the major axis variation and the second the next largest and so on, until cumulatively all the available variation is explained. In the context of genetic data, PCA summarizes the major axes of variation in allele frequencies and then produces the coordinates of individuals along these axes.</p>
+<p>To perform a PCA on our cichlid data, we will use <code>plink</code> - specifically <a href="https://www.cog-genomics.org/plink/1.9/">version 1.9</a> (although be aware <a href="http://zzz.bwh.harvard.edu/plink/">older</a> and <a href="https://www.cog-genomics.org/plink/2.0/">newer</a> versions are available). Note that <code>plink</code> was originally written with human data in mind and has also subsequently been extended to include some model species. As a result, we need to provide a bit of extra info to get it to work on our dataset.</p>
+<div id="linkage-pruning" class="section level3">
+<h3>Linkage pruning</h3>
+<p>One of the major assumptions of PCA is that the data we use is indpendent - i.e. there are no spurious correlations among the measured variables. This is obviously not the case for most genomic data as allele frequencies are correlated due to physical linkage and linkage disequilibrium. So as a first step, we need to prune our dataset of variants that are in linkage.</p>
+<p>First things first, we will make a directory called <code>pca</code></p>
+<pre class="shell"><code># move to your home directory
+cd ~
+# make a pca directory
+mkdir pca
+# move into it
+cd pca</code></pre>
+<p>Next we need to get our data, which we can do like so:</p>
+<pre class="shell"><code>cp /shared/mark/pca/Pundamilia_subset.vcf.gz .</code></pre>
+<p>We will also simplify our code using some environmental variables. Primarily we set one for our filtered VCF.</p>
+<pre class="shell"><code>VCF=~/pca/Pundamilia_subset.vcf.gz</code></pre>
+<p>This will make it very easy for <code>plink</code> to read in our data. Next we run the linkage pruning. Run the command and we will breakdown what all the arguments mean.</p>
+<pre class="shell"><code># perform linkage pruning - i.e. identify prune sites
+plink --vcf $VCF --double-id --allow-extra-chr \
+--set-missing-var-ids @:# \
+--indep-pairwise 50 10 0.1 --out cichlids</code></pre>
+<p>So for our plink command, we did the following:</p>
+<ul>
+<li><code>--vcf</code> - specified the location of our VCF file.</li>
+<li><code>--double-id</code> - told <code>plink</code> to duplicate the id of our samples (this is because plink typically expects a family and individual id - i.e. for pedigree data - this is not necessary for us.</li>
+<li><code>--allow-extra-chr</code> - allow additional chromosomes beyond the human chromosome set. This is necessary as otherwise plink expects chromosomes 1-22 and the human X chromosome.</li>
+<li><code>--set-missing-var-ids</code> - also necessary to set a variant ID for our SNPs. Human and model organisms often have annotated SNP names and so <code>plink</code> will look for these. We do not have them so instead we set ours to default to <code>chromosome:position</code> which can be achieved in <code>plink</code> by setting the option <code>@:#</code> - <a href="https://www.cog-genomics.org/plink/1.9/data#set_missing_var_ids">see here</a> for more info.</li>
+<li><code>--indep-pairwise</code> - finally we are actually on the command that performs our linkage pruning! The first argument, <code>50</code> denotes we have set a window of 50 Kb. The second argument, <code>10</code> is our window step size - meaning we move 10 bp each time we calculate linkage. Finally, we set an r<sup>2</sup> threshold - i.e. the threshold of linkage we are willing to tolerate. Here we prune any variables that show an r<sup>2</sup> of greater than 0.1.</li>
+<li><code>--out</code> Produce the prefix for the output data.</li>
+</ul>
+<p>As well as being versatile, <code>plink</code> is very fast. It will quickly produce a linkage analysis for all our data and write plenty of information to the screen. When complete, it will write out two files <code>cichlids.prune.in</code> and <code>cichlids.prune.out</code>. The first of these is a list of sites which fell below our linkage threshold - i.e. those we should retain. The other file is the opposite of this. In the next step, we will produce a PCA from these linkage-pruned sites.</p>
+</div>
+<div id="perform-a-pca" class="section level3">
+<h3>Perform a PCA</h3>
+<p>Next we rerun plink with a few additional arguments to get it to conduct a PCA. We will run the command and then break it down as it is running.</p>
+<pre class="shell"><code># prune and create pca
+plink --vcf $VCF --double-id --allow-extra-chr --set-missing-var-ids @:# \
+--extract cichlids.prune.in \
+--make-bed --pca --out cichlids</code></pre>
+<p>This is very similar to our previous command. What did we do here?</p>
+<ul>
+<li><code>--extract</code> - this just lets <code>plink</code> know we want to extract only these positions from our VCF - in other words, the analysis will only be conducted on these.</li>
+<li><code>--make-bed</code> - this is necessary to write out some additional files for another type of population structure analysis - a model based approach with <code>admixture</code>.</li>
+<li><code>--pca</code> - fairly self explanatory, this tells <code>plink</code> to calculate a principal components analysis.</li>
+</ul>
+<p>Once the command is run, we will see a series of new files. We will break these down too:</p>
+<p>PCA output:</p>
+<ul>
+<li><code>cichlids.eigenval</code> - the eigenvalues from our analysis</li>
+<li><code>cichlids.eigenvec</code>- the eigenvectors from our analysis</li>
+</ul>
+<p><code>plink</code> binary output</p>
+<ul>
+<li><code>cichlids.bed</code> - the cichlids bed file - this is a binary file necessary for admixture analysis. It is essentially the genotypes of the pruned dataset recoded as 1s and 0s.</li>
+<li><code>cichlids.bim</code> - a map file (i.e. information file) of the variants contained in the bed file.<br />
+</li>
+<li><code>cichlids.fam</code> - a map file for the individuals contained in the bed file.</li>
+</ul>
+</div>
+<div id="plotting-the-pca-output" class="section level3">
+<h3>Plotting the PCA output</h3>
+<p>Next we turn to R to plot the analysis we have produced!</p>
+<div id="setting-up-the-r-environment" class="section level4">
+<h4>Setting up the R environment</h4>
+<p>First load the <code>tidyverse</code> package and ensure you have moved the <code>plink</code> output into the working directory you are operating in. You may want to set up an RStudio Project to manage this analysis. See <a href="https://speciationgenomics.github.io/more_advanced_R/">here</a> for a guide on how to do this.</p>
+<pre class="r"><code># load tidyverse package
+library(tidyverse)</code></pre>
+<p>Then we will use a combination of <code>readr</code> and the standard <code>scan</code> function to read in the data.</p>
+<pre class="r"><code># read in data
+pca &lt;- read_table2(&quot;./cichlids.eigenvec&quot;, col_names = FALSE)
+eigenval &lt;- scan(&quot;./cichlids.eigenval&quot;)</code></pre>
+</div>
+<div id="cleaning-up-the-data" class="section level4">
+<h4>Cleaning up the data</h4>
+<p>Unfortunately, we need to do a bit of legwork to get our data into reasonable shape. First we will remove a nuisance column (<code>plink</code> outputs the individual ID twice). We will also give our <code>pca</code> data.frame proper column names.</p>
+<pre class="r"><code># sort out the pca data
+# remove nuisance column
+pca &lt;- pca[,-1]
+# set names
+names(pca)[1] &lt;- &quot;ind&quot;
+names(pca)[2:ncol(pca)] &lt;- paste0(&quot;PC&quot;, 1:(ncol(pca)-1))</code></pre>
+<p>Next we can add a species, location and if required, a species x location vector. We will do this using the R version of <code>grep</code>. We then use <code>paste0</code> to combine the columns.</p>
+<pre class="r"><code># sort out the individual species and pops
+# spp
+spp &lt;- rep(NA, length(pca$ind))
+spp[grep(&quot;PunPund&quot;, pca$ind)] &lt;- &quot;pundamilia&quot;
+spp[grep(&quot;PunNyer&quot;, pca$ind)] &lt;- &quot;nyererei&quot;
+# location
+loc &lt;- rep(NA, length(pca$ind))
+loc[grep(&quot;Mak&quot;, pca$ind)] &lt;- &quot;makobe&quot;
+loc[grep(&quot;Pyt&quot;, pca$ind)] &lt;- &quot;python&quot;
+# combine - if you want to plot each in different colours
+spp_loc &lt;- paste0(spp, &quot;_&quot;, loc)</code></pre>
+<p>With these variables created, we can remake our data.frame like so. Note the use of <code>as.tibble</code> to ensure that we make a tibble for easy summaries etc.</p>
+<pre class="r"><code># remake data.frame
+pca &lt;- as.tibble(data.frame(pca, spp, loc, spp_loc))</code></pre>
+</div>
+<div id="plotting-the-data" class="section level4">
+<h4>Plotting the data</h4>
+<p>Now that we have done our housekeeping, we have everything in place to actually visualise the data properly. First we will plot the eigenvalues. It is quite straightforward to translate these into percentage variance explained (although note, you could just plot these raw if you wished).</p>
+<pre class="r"><code># first convert to percentage variance explained
+pve &lt;- data.frame(PC = 1:16, pve = eigenval/sum(eigenval)*100)</code></pre>
+<p>With that done, it is very simple to create a bar plot showing the percentage of variance each principal component explains.</p>
+<pre class="r"><code># make plot
+a &lt;- ggplot(pve, aes(PC, pve)) + geom_bar(stat = &quot;identity&quot;)
+a + ylab(&quot;Percentage variance explained&quot;) + theme_light()</code></pre>
+<p><img src="docs/unnamed-chunk-7-1.png" /></p>
+<p>Cumulatively, they explain 100% of the variance but PC1, PC2 and possible PC3 together explain about 30% of the variance. We could calculate this with the <code>cumsum</code> function, like so:</p>
+<pre class="r"><code># calculate the cumulative sum of the percentage variance explained
+cumsum(pve$pve)</code></pre>
+<p>Next we move on to actually plotting our PCA. Given the work we did earlier to get our data into shape, this doesn’t take much effort at all.</p>
+<pre class="r"><code># plot pca
+b &lt;- ggplot(pca, aes(PC1, PC2, col = spp, shape = loc)) + geom_point(size = 3)
+b &lt;- b + scale_colour_manual(values = c(&quot;red&quot;, &quot;blue&quot;))
+b &lt;- b + coord_equal() + theme_light()
+b + xlab(paste0(&quot;PC1 (&quot;, signif(pve$pve[1], 3), &quot;%)&quot;)) + ylab(paste0(&quot;PC2 (&quot;, signif(pve$pve[2], 3), &quot;%)&quot;))</code></pre>
+<p><img src="docs/unnamed-chunk-9-1.png" /></p>
+<p>Note that this R code block also includes arguments to display the percentage of variance explained on each axis. Here we only plot PC1 and PC2. From this figure, we can see PC1 separates out the geographical locations and PC2 separates out the species.</p>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
