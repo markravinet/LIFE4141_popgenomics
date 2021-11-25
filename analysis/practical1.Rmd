@@ -167,8 +167,6 @@ a <- ggplot(pve, aes(PC, pve)) + geom_bar(stat = "identity")
 a + ylab("Percentage variance explained") + theme_light()
 ```
 
-![](docs/unnamed-chunk-7-1.png)
-
 Cumulatively, they explain 100% of the variance but PC1, PC2 and possible PC3 together explain about 30% of the variance. We could calculate this with the `cumsum` function, like so:
 
 ```{r cumsum, eval = TRUE, echo = TRUE}
@@ -185,8 +183,6 @@ b <- b + scale_colour_manual(values = c("red", "blue"))
 b <- b + coord_equal() + theme_light()
 b + xlab(paste0("PC1 (", signif(pve$pve[1], 3), "%)")) + ylab(paste0("PC2 (", signif(pve$pve[2], 3), "%)"))
 ```
-
-![](docs/unnamed-chunk-9-1.png)
 
 Note that this R code block also includes arguments to display the percentage of variance explained on each axis. Here we only plot PC1 and PC2. From this figure, we can see PC1 separates out the geographical locations and PC2 separates out the species.
 
