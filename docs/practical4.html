@@ -305,7 +305,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-11-25
+<strong>Last updated:</strong> 2021-11-26
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -396,16 +396,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommarkravinetLIFE4141popgenomicstree9cfe326811b194be5393e28106d2c3622fd841a0targetblank9cfe326a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/markravinet/LIFE4141_popgenomics/tree/9cfe326811b194be5393e28106d2c3622fd841a0" target="_blank">9cfe326</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommarkravinetLIFE4141popgenomicstree5bac50545d3de60a0f61f403f89d3e2be426f0c2targetblank5bac505a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/markravinet/LIFE4141_popgenomics/tree/5bac50545d3de60a0f61f403f89d3e2be426f0c2" target="_blank">5bac505</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcommarkravinetLIFE4141popgenomicstree9cfe326811b194be5393e28106d2c3622fd841a0targetblank9cfe326a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcommarkravinetLIFE4141popgenomicstree5bac50545d3de60a0f61f403f89d3e2be426f0c2targetblank5bac505a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/markravinet/LIFE4141_popgenomics/tree/9cfe326811b194be5393e28106d2c3622fd841a0" target="_blank">9cfe326</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/markravinet/LIFE4141_popgenomics/tree/5bac50545d3de60a0f61f403f89d3e2be426f0c2" target="_blank">5bac505</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -455,6 +455,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/markravinet/LIFE4141_popgenomics/blob/5bac50545d3de60a0f61f403f89d3e2be426f0c2/analysis/practical4.Rmd" target="_blank">5bac505</a>
+</td>
+<td>
+markravinet
+</td>
+<td>
+2021-11-26
+</td>
+<td>
+Uploading R scripts
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/markravinet/LIFE4141_popgenomics/49e1e38c4c1b19f648031758f7043f1a245312b4/docs/practical4.html" target="_blank">49e1e38</a>
+</td>
+<td>
+markravinet
+</td>
+<td>
+2021-11-25
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -516,6 +550,15 @@ Fix errors
 <div id="inferring-selection-in-the-genome---part-3" class="section level1">
 <h1>Inferring selection in the genome - part 3</h1>
 <p>Now that we have SNPs that we think might be under selection, we can take the next step to identify what the genes lying close those SNPs. We will do this entirely in <code>R</code>.</p>
+<div id="before-starting" class="section level3">
+<h3>Before starting</h3>
+<p>At some point in this tutorial, we will need the gene annotation for the house sparrow genome. We’ll copy this into our directory like so:</p>
+<pre class="shell"><code># move into rehh
+cd rehh
+# copy from the shared directory
+cp /shared/mark/genome_scan/misc/house_sparrow_chr8.gff .</code></pre>
+<p>We’ll explain what this file is later, for now we should be ready to run the analysis in R.</p>
+</div>
 <div id="setting-up-the-r-environment" class="section level3">
 <h3>Setting up the R environment</h3>
 <p>The first thing we need to do is clear our <code>R</code> environment and load the packages we need. Like so:</p>
@@ -524,16 +567,16 @@ rm(list = ls())
 # load packages
 library(tidyverse)</code></pre>
 <p>That’s it! Just the tidyverse for this section.</p>
-<p>We’ll also read in the data we created in the <a href="">haplotype scan</a>.</p>
+<p>We’ll also read in the data we created in the <a href="practical3.html">haplotype scan</a>. <strong>As always, you may need to change the paths here</strong></p>
 <pre class="r"><code># read in the selection scan data
-house_bac &lt;- read_tsv(&quot;./house_bac_xpEHH.tsv&quot;)</code></pre>
+house_bac &lt;- read_tsv(&quot;~/rehh/house_bac_xpEHH.tsv&quot;)</code></pre>
 <p>Now we’re ready to proceed</p>
 </div>
 <div id="reading-in-a-gff-file" class="section level3">
 <h3>Reading in a gff file</h3>
 <p>In order to identify genes, we need a <code>gff</code> file - which is gene annotation (or feature) file. You can learn more about the <code>gff</code> format <a href="https://useast.ensembl.org/info/website/upload/gff.html">here</a>. For this tutorial, we will use a subset of the house sparrow genome annotation produced by <a href="https://advances.sciencemag.org/content/3/6/e1602996.full">Elgvin et al (2017)</a>. The version we use here is just for chromsome 8.</p>
 <pre class="r"><code># read in the gff
-gff &lt;-  read_tsv(&quot;./house_sparrow_chr8.gff&quot;, col_names = FALSE)
+gff &lt;-  read_tsv(&quot;~/rehh/house_sparrow_chr8.gff&quot;, col_names = FALSE)
 # subset and clear up the gff - add names
 colnames(gff) &lt;- c(&quot;chr&quot;, &quot;source&quot;, &quot;feature&quot;, &quot;start&quot;, &quot;end&quot;, &quot;score&quot;,
                    &quot;strand&quot;, &quot;frame&quot;, &quot;attribute&quot;)</code></pre>
