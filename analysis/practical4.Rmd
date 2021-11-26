@@ -12,6 +12,19 @@ editor_options:
 
 Now that we have SNPs that we think might be under selection, we can take the next step to identify what the genes lying close those SNPs. We will do this entirely in `R`.
 
+### Before starting
+
+At some point in this tutorial, we will need the gene annotation for the house sparrow genome. We'll copy this into our directory like so: 
+
+```shell
+# move into rehh
+cd rehh
+# copy from the shared directory
+cp /shared/mark/genome_scan/misc/house_sparrow_chr8.gff .
+```
+
+We'll explain what this file is later, for now we should be ready to run the analysis in R.
+
 ### Setting up the R environment
 
 The first thing we need to do is clear our `R` environment and load the packages we need. Like so:
@@ -24,11 +37,11 @@ library(tidyverse)
 ```
 That's it! Just the tidyverse for this section.
 
-We'll also read in the data we created in the [haplotype scan]().
+We'll also read in the data we created in the [haplotype scan](practical3.html). **As always, you may need to change the paths here**
 
 ```r
 # read in the selection scan data
-house_bac <- read_tsv("./house_bac_xpEHH.tsv")
+house_bac <- read_tsv("~/rehh/house_bac_xpEHH.tsv")
 ```
 
 Now we're ready to proceed
@@ -39,7 +52,7 @@ In order to identify genes, we need a `gff` file - which is gene annotation (or 
 
 ```r
 # read in the gff
-gff <-  read_tsv("./house_sparrow_chr8.gff", col_names = FALSE)
+gff <-  read_tsv("~/rehh/house_sparrow_chr8.gff", col_names = FALSE)
 # subset and clear up the gff - add names
 colnames(gff) <- c("chr", "source", "feature", "start", "end", "score",
                    "strand", "frame", "attribute")

@@ -1,7 +1,11 @@
 ---
 title: "Practical 1"
-layout: archive
-permalink: /pca/
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -107,7 +111,7 @@ First load the `tidyverse` package and ensure you have moved the `plink` output 
 library(tidyverse)
 ```
 
-Then we will use a combination of `readr` and the standard `scan` function to read in the data.
+Then we will use a combination of `readr` and the standard `scan` function to read in the data. **NB - you will need to edit the path to the files if you are writing your own R scripts.** 
 
 ```{r read, eval = TRUE, echo = TRUE}
 pca <- read_table("./data/cichlids.eigenvec", col_names = FALSE)
@@ -147,7 +151,7 @@ With these variables created, we can remake our data.frame like so. Note the use
 
 ```{r tibble, eval = TRUE, echo = TRUE}
 # remake data.frame
-pca <- as.tibble(data.frame(pca, spp, loc, spp_loc))
+pca <- as_tibble(data.frame(pca, spp, loc, spp_loc))
 ```
 
 #### Plotting the data

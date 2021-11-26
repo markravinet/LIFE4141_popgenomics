@@ -43,7 +43,7 @@ library(tidyverse)
 
 ### Reading in data from vcfs
 
-A nice new addition to `rehh` is the ability to read in (and also filter) your data from a vcf. However, it is still quite tricky to split up individuals so instead we will read in a vcf for each population. We read in data using the `data2haplohh` function:
+A nice new addition to `rehh` is the ability to read in (and also filter) your data from a vcf. However, it is still quite tricky to split up individuals so instead we will read in a vcf for each population. We read in data using the `data2haplohh` function. Remember again, **you may need to change the path to these files depending on where you have placed them**
 
 ```r
 # read in data for each species

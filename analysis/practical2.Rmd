@@ -165,7 +165,7 @@ rm(list = ls())
 library(tidyverse)
 ```
 
-Then with this done, we can read in the data.
+Then with this done, we can read in the data. **Again remember you may need to change the path to the files you are reading in depending on where you are running R**
 
 ```r
 infile <- "./house_bac_div_stats.csv"
@@ -195,7 +195,7 @@ Clearly there is something going on at the centre of the chromosome here. We sho
 # first gather the data
 pi <- house_bac %>%
   select(mid, contains("pi")) %>%
-  gather(key = "species", value = "pi", -mid)
+  pivot_longer(cols = contains("pi"), names_to = "species", values_to = "pi")
 # then plot it
 ggplot(pi, aes(mid, pi, colour = species)) + geom_line()
 ```
