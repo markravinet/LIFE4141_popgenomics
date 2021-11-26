@@ -8,9 +8,31 @@ editor_options:
   chunk_output_type: console
 ---
 
+## Overview
+
 Welcome to the website for our LIFE4141 population genomics practical. Today we are going to:
 
 1. [Perform a PCA on some haplochromine cichlid data](practical1.html)
 2. [Carry out a sliding window-analysis of *F*<sub>ST</sub> and *d*<sub>XY</sub> on a dataset of *Passer* sparrows](practical2.html)
 3. [Calculate haplotype homozygosity statistics between two *Passer* sparrow species](practical3.html)
 4. [Use this pairwise analysis to identify candidate genes in the genome](practical4.html)
+
+### Working with R Studio Server
+
+In order to simplify things for the tutorial and to ensure we all have a common `R` installation, we will be using the R Studio Server. This is very straightforward to use and can be done via a browser (when you are logged in to the University of Nottingham VPN or inside the firewall).
+
+1. Open a browser
+2. Navigate to this address: [http://10.102.161.9:8787]
+3. When prompted, enter your username and password.
+
+**I will give you your password during the practical - it is not the same as your university one**
+
+Your RStudio working directory will be your home on the CycleCloud cluster. I have also prepared some R scripts for you to use if you wish. In order to get these, type the following when you are logged in to the cluster via an ssh terminal:
+
+```shell
+# move to home directory
+cd ~
+# copy Rscripts
+cp /shared/mark/Rscripts/*.R .
+```
+
