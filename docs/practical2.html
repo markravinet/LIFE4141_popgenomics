@@ -13,7 +13,7 @@
 
 <title>Practical 2</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -35,7 +35,7 @@
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
-<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
 <style type="text/css">
 div.section {
@@ -72,6 +72,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -92,6 +93,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -149,11 +153,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -244,7 +252,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -287,7 +295,9 @@ $(document).ready(function () {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -296,7 +306,9 @@ $(document).ready(function () {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -305,17 +317,27 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-11-26
+<strong>Last updated:</strong> 2022-10-19
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
 </p>
 <p>
-<strong>Knit directory:</strong> <code>LIFE4141_popgenomics/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+<strong>Knit directory:</strong> <code>LIFE4141_popgenomics/</code>
+<span class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
 </p>
 <p>
-This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
-  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
 </p>
 <hr>
 </div>
@@ -324,103 +346,156 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
 </p>
 </div>
 <div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20211125code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20211125)</code> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20211125code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20211125)</code> </a>
 </p>
 </div>
-<div id="strongSeedstrongcodesetseed20211125code" class="panel-collapse collapse">
+<div id="strongSeedstrongcodesetseed20211125code"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>The command <code>set.seed(20211125)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+<p>The command <code>set.seed(20211125)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
 </p>
 </div>
-<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
 </p>
 </div>
 <div id="strongCachestrongnone" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
 </p>
 </div>
 <div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommarkravinetLIFE4141popgenomicstree5bac50545d3de60a0f61f403f89d3e2be426f0c2targetblank5bac505a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/markravinet/LIFE4141_popgenomics/tree/5bac50545d3de60a0f61f403f89d3e2be426f0c2" target="_blank">5bac505</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommarkravinetLIFE4141popgenomicstreedb46e57c6a9372a59d68af849a72d9652bde2603targetblankdb46e57a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/markravinet/LIFE4141_popgenomics/tree/db46e57c6a9372a59d68af849a72d9652bde2603" target="_blank">db46e57</a>
+</a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcommarkravinetLIFE4141popgenomicstree5bac50545d3de60a0f61f403f89d3e2be426f0c2targetblank5bac505a" class="panel-collapse collapse">
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcommarkravinetLIFE4141popgenomicstreedb46e57c6a9372a59d68af849a72d9652bde2603targetblankdb46e57a"
+class="panel-collapse collapse">
 <div class="panel-body">
 <p>
-Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/markravinet/LIFE4141_popgenomics/tree/5bac50545d3de60a0f61f403f89d3e2be426f0c2" target="_blank">5bac505</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version
+<a href="https://github.com/markravinet/LIFE4141_popgenomics/tree/db46e57c6a9372a59d68af849a72d9652bde2603" target="_blank">db46e57</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
 </p>
 <p>
-Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
 </p>
 <pre><code>
 Ignored files:
     Ignored:    .DS_Store
+    Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  LIFE4141_popgenomics/
 
 Unstaged changes:
     Deleted:    analysis/practical2.md
 
 </code></pre>
 <p>
-Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
 </p>
 </div>
 </div>
@@ -431,7 +506,12 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <div id="versions" class="tab-pane fade">
 
 <p>
-These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/practical2.Rmd</code>) and HTML (<code>docs/practical2.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/practical2.Rmd</code>) and HTML
+(<code>docs/practical2.html</code>) files. If you’ve configured a remote
+Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -455,6 +535,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/markravinet/LIFE4141_popgenomics/087984ab49f61d58631121e1022e21f265752bb0/docs/practical2.html" target="_blank">087984a</a>
+</td>
+<td>
+markravinet
+</td>
+<td>
+2021-11-26
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -615,38 +712,80 @@ Publish initial files for my project
 </div>
 </div>
 </div>
-<div id="inferring-selection-in-the-genome---part-1" class="section level1">
+<div id="inferring-selection-in-the-genome---part-1"
+class="section level1">
 <h1>Inferring selection in the genome - part 1</h1>
-<p>There are many different ways to detect regions under divergent selection. In this tutorial, we are going to compute three of them in sliding genomic windows: - pi, a measure of genetic variation - <em>F</em><sub>ST</sub> - a measure of genomic differentiation - <em>d</em><sub>XY</sub> - a measure of absolute divergence</p>
-<p>Note that dxy <em>d</em><sub>XY</sub> and pi require monomorphic sites to be present in the dataset, whereas <em>F</em><sub>ST</sub> is only computed on bi-allelic sites. It is thus important to filter out indels and multi-allelic sites and to keep monomorphic sites (i.e. do not apply an maf filter).</p>
-<p>As SNP <em>F</em><sub>ST</sub> values are very noisy, it is also better to compute <em>F</em><sub>ST</sub> estimates for entire regions. Selection is expected to not only affect a single SNP and the power to detect a selective sweep is thus higher for genomic regions. How large the genomic region should be depends on the SNP density, how fast linkage disequilibrium decays, how recent the sweep is and other factors. It is thus advisable to try different window sizes. Here, we will use 100 kb windows. An alternative is to use windows of fixed number of sites instead of fixed size.</p>
+<p>There are many different ways to detect regions under divergent
+selection. In this tutorial, we are going to compute three of them in
+sliding genomic windows: - pi, a measure of genetic variation -
+<em>F</em><sub>ST</sub> - a measure of genomic differentiation -
+<em>d</em><sub>XY</sub> - a measure of absolute divergence</p>
+<p>Note that dxy <em>d</em><sub>XY</sub> and pi require monomorphic
+sites to be present in the dataset, whereas <em>F</em><sub>ST</sub> is
+only computed on bi-allelic sites. It is thus important to filter out
+indels and multi-allelic sites and to keep monomorphic sites (i.e. do
+not apply an maf filter).</p>
+<p>As SNP <em>F</em><sub>ST</sub> values are very noisy, it is also
+better to compute <em>F</em><sub>ST</sub> estimates for entire regions.
+Selection is expected to not only affect a single SNP and the power to
+detect a selective sweep is thus higher for genomic regions. How large
+the genomic region should be depends on the SNP density, how fast
+linkage disequilibrium decays, how recent the sweep is and other
+factors. It is thus advisable to try different window sizes. Here, we
+will use 100 kb windows. An alternative is to use windows of fixed
+number of sites instead of fixed size.</p>
 <div id="setting-up" class="section level3">
 <h3>Setting up</h3>
-<p>In order to calculate these statistics, we will use a set of custom <code>python</code> scripts written by <a href="https://simonmartinlab.org/">Simon Martin</a> which you can download <a href="https://github.com/simonhmartin/genomics_general">here</a>. We will spend a few moments learning how to install these scripts as we will use them here and also in the practical session later today too. Thankfully, they are very easy to set up, we can download and install them using <code>git</code>. We do this like so:</p>
+<p>In order to calculate these statistics, we will use a set of custom
+<code>python</code> scripts written by <a
+href="https://simonmartinlab.org/">Simon Martin</a> which you can
+download <a
+href="https://github.com/simonhmartin/genomics_general">here</a>. We
+will spend a few moments learning how to install these scripts as we
+will use them here and also in the practical session later today too.
+Thankfully, they are very easy to set up, we can download and install
+them using <code>git</code>. We do this like so:</p>
 <pre class="shell"><code># move to home directory
 cd ~
 # use git clone to clone the genomics_general github repo
 git clone https://github.com/simonhmartin/genomics_general.git</code></pre>
-<p>This will download the scripts into a folder in your home directory. You can look inside to see all the different scripts available. However, what we really want to do is to make sure that they are accessible wherever we are on the cluster. We can do that easily too. We simply add the directory of the scripts to the <code>$PATH</code> variable like so:</p>
+<p>This will download the scripts into a folder in your home directory.
+You can look inside to see all the different scripts available. However,
+what we really want to do is to make sure that they are accessible
+wherever we are on the cluster. We can do that easily too. We simply add
+the directory of the scripts to the <code>$PATH</code> variable like
+so:</p>
 <pre class="shell"><code># create a custom path
 export PATH=$PATH:$HOME/genomics_general</code></pre>
-<p>Now if you try typing the following into the shell, you should see the help dialogue:</p>
+<p>Now if you try typing the following into the shell, you should see
+the help dialogue:</p>
 <pre class="shell"><code>popgenWindows.py --help</code></pre>
-<p>However, the <code>$PATH</code> variable we created just now is temporary. If you log off, it will be gone. So we can echo it to our <code>.bashrc</code> file to make sure it is loaded each time we start a new shell session. We do that like so</p>
+<p>However, the <code>$PATH</code> variable we created just now is
+temporary. If you log off, it will be gone. So we can echo it to our
+<code>.bashrc</code> file to make sure it is loaded each time we start a
+new shell session. We do that like so</p>
 <pre class="shell"><code>echo &quot;# create a custom path&quot; &gt; ~/.bashrc
 echo &quot;export PATH=$PATH:$HOME/genomics_general:$HOME/genomics_general/VCF_processing&quot; &gt; ~/.bashrc</code></pre>
 <p>Now the scripts are easily callable!</p>
 </div>
 <div id="converting-the-input-files" class="section level3">
 <h3>Converting the input files</h3>
-<p>First, we will convert a <code>vcf</code> file into Simon Martin’s <code>geno</code> file format. To do that we need to use the <code>parseVCF.py</code> script. The <code>geno</code> file is very straightforward - it is essentially a genotype matrix and easy to create.</p>
-<p>We will convert a vcf with data from 105 individuals into a geno file that we can process downstream. First lets set up a directory to work in:</p>
+<p>First, we will convert a <code>vcf</code> file into Simon Martin’s
+<code>geno</code> file format. To do that we need to use the
+<code>parseVCF.py</code> script. The <code>geno</code> file is very
+straightforward - it is essentially a genotype matrix and easy to
+create.</p>
+<p>We will convert a vcf with data from 105 individuals into a geno file
+that we can process downstream. First lets set up a directory to work
+in:</p>
 <pre class="shell"><code>cd ~
 mkdir genome_scan
 cd genome_scan</code></pre>
-<p>Then we copy over our data into this directory we have just created:</p>
+<p>Then we copy over our data into this directory we have just
+created:</p>
 <pre class="shell"><code>cp /shared/mark/genome_scan/vcf/sparrows_chr8_subset.vcf.gz ./</code></pre>
-<p>Before we go further with converting the file, it is worth looking at it in a bit more detail to get some idea of what it contains:</p>
+<p>Before we go further with converting the file, it is worth looking at
+it in a bit more detail to get some idea of what it contains:</p>
 <pre class="shell"><code># what individuals?
 bcftools query -l sparrows_chr8_subset.vcf.gz
 # how many individuals?
@@ -654,24 +793,34 @@ bcftools query -l sparrows_chr8_subset.vcf.gz | wc -l
 # how many variants?
 bcftools index sparrows_chr8_subset.vcf.gz
 bcftools index -n sparrows_chr8_subset.vcf.gz</code></pre>
-<p>We can very easily convert the file. We do so using the <code>parseVCF.py</code> script.</p>
+<p>We can very easily convert the file. We do so using the
+<code>parseVCF.py</code> script.</p>
 <pre class="shell"><code>parseVCF.py -i sparrows_chr8_subset.vcf.gz -o sparrows_chr8_subset.geno</code></pre>
-<p>This should take a few seconds to run and then we can have a look at the input:</p>
+<p>This should take a few seconds to run and then we can have a look at
+the input:</p>
 <pre class="shell"><code>head sparrows_chr8_subset.geno | cut -f 1-10 | column -t</code></pre>
-<p>Essentially this is a genotype matrix for each of our individuals. It is also a good idea to compress this file with <code>gzip</code>. This is also really straightforward.</p>
+<p>Essentially this is a genotype matrix for each of our individuals. It
+is also a good idea to compress this file with <code>gzip</code>. This
+is also really straightforward.</p>
 <pre class="shell"><code>gzip sparrows_chr8_subset.geno</code></pre>
 <p>Now we are ready to analyse the data!</p>
 </div>
 <div id="performing-the-analysis" class="section level3">
 <h3>Performing the analysis</h3>
-<p>We want to calculate <em>d</em><sub>XY</sub>, <em>F</em><sub>ST</sub> and pi from the house sparrow and the bactrianus sparrow from this dataset. We can do this very easily, but first it will help if we create a population file that we can give to the script so that we don’t need to manually input each of the sample names. We can do this fairly easily using <code>grep</code></p>
+<p>We want to calculate <em>d</em><sub>XY</sub>, <em>F</em><sub>ST</sub>
+and pi from the house sparrow and the bactrianus sparrow from this
+dataset. We can do this very easily, but first it will help if we create
+a population file that we can give to the script so that we don’t need
+to manually input each of the sample names. We can do this fairly easily
+using <code>grep</code></p>
 <pre class="shell"><code># generate all the sample names
 bcftools query -l sparrows_chr8_subset.vcf.gz &gt; samples
 # get the bactrianus sparrow samples
 grep &quot;^[KP][Ad]&quot; samples &gt; bactrianus
 # get the house sparrow samples
 grep -v &quot;^[KP][Ad]*&quot; samples &gt; house</code></pre>
-<p>However, the population file also needs a column with the population denoted in it. So we can generate this with <code>awk</code>.</p>
+<p>However, the population file also needs a column with the population
+denoted in it. So we can generate this with <code>awk</code>.</p>
 <pre class="shell"><code>awk &#39;{print $1&quot;\tbac&quot;}&#39; bactrianus &gt; pop_file
 awk &#39;{print $1&quot;\thouse&quot;}&#39; house &gt;&gt; pop_file
 # now look at the pop_file
@@ -686,38 +835,67 @@ cat pop_file</code></pre>
 <ul>
 <li><code>-g</code> the input geno file</li>
 <li><code>-o</code> the output stats file</li>
-<li><code>-f</code> the format of the input file - here phased simply means we have both sites (i.e. it is diploid)</li>
+<li><code>-f</code> the format of the input file - here phased simply
+means we have both sites (i.e. it is diploid)</li>
 <li><code>-w</code> the size of the window in bp</li>
-<li><code>-m</code> the minimum number of sites within a window - here set to 10 to get an output</li>
-<li><code>-s</code> the size of the step for the sliding window - here it is 25 Kb.</li>
-<li><code>-p</code> the population names to compare from the pops file.</li>
+<li><code>-m</code> the minimum number of sites within a window - here
+set to 10 to get an output</li>
+<li><code>-s</code> the size of the step for the sliding window - here
+it is 25 Kb.</li>
+<li><code>-p</code> the population names to compare from the pops
+file.</li>
 <li><code>--popsFile</code> the name of the pops file</li>
-<li><code>--writeFailedWindow</code> write to the output even if the window does not meet filtering requirements</li>
+<li><code>--writeFailedWindow</code> write to the output even if the
+window does not meet filtering requirements</li>
 </ul>
-<p>This will run very quickly and write out our results after printing a dialogue to the screen. We can then use <code>head</code> to examine the results. Of course it is worth remembering here that this is just a dummy dataset that we used to run the analyses quickly. In the next section, when we visualise this in <code>R</code>, we will use a real dataset!</p>
+<p>This will run very quickly and write out our results after printing a
+dialogue to the screen. We can then use <code>head</code> to examine the
+results. Of course it is worth remembering here that this is just a
+dummy dataset that we used to run the analyses quickly. In the next
+section, when we visualise this in <code>R</code>, we will use a real
+dataset!</p>
 </div>
 <div id="visualising-the-results" class="section level3">
 <h3>Visualising the results</h3>
-<p>The real analysis we will visualise in this step was conducted on 413 individuals from across the <em>Passer</em> sparrow distribution. This includes different species but here we will use a comparison of <em>d</em><sub>XY</sub>, <em>F</em><sub>ST</sub> and pi from house sparrows in Europe versus bactrianus sparrows from Kazahkstan and Iran.</p>
+<p>The real analysis we will visualise in this step was conducted on 413
+individuals from across the <em>Passer</em> sparrow distribution. This
+includes different species but here we will use a comparison of
+<em>d</em><sub>XY</sub>, <em>F</em><sub>ST</sub> and pi from house
+sparrows in Europe versus bactrianus sparrows from Kazahkstan and
+Iran.</p>
 <p>We can get the real data like so:</p>
 <pre class="shell"><code>cd genome_scan
 cp /shared/mark/genome_scan/outputs/house_bac_div_stats.csv</code></pre>
-<p>Now we will turn to <code>R</code> to visualise our data. The first thing we need to do is prepare the <code>R</code> environment.</p>
+<p>Now we will turn to <code>R</code> to visualise our data. The first
+thing we need to do is prepare the <code>R</code> environment.</p>
 <pre class="r"><code># clear the r environment
 rm(list = ls())
 # load the tidyverse library
 library(tidyverse)</code></pre>
-<p>Then with this done, we can read in the data. <strong>Again remember you may need to change the path to the files you are reading in depending on where you are running R</strong></p>
+<p>Then with this done, we can read in the data. <strong>Again remember
+you may need to change the path to the files you are reading in
+depending on where you are running R</strong></p>
 <pre class="r"><code>infile &lt;- &quot;./house_bac_div_stats.csv&quot;
 house_bac &lt;- read_csv(infile)</code></pre>
-<p>We can now take a look at the <code>house_bac</code> dataframe in a bit more detail. Note that it is a <code>tibble</code> so that we can easily get a quick summary of the data. This contains estimates of pi, <em>d</em><sub>XY</sub> and <em>F</em><sub>ST</sub> in 100Kb windows with a 25Kb step along our chromosome of interest (chromosome 8 here).</p>
-<p>Let’s plot our statistics to get a better idea of what is going on here. We will start with <em>F</em><sub>ST</sub>:</p>
+<p>We can now take a look at the <code>house_bac</code> dataframe in a
+bit more detail. Note that it is a <code>tibble</code> so that we can
+easily get a quick summary of the data. This contains estimates of pi,
+<em>d</em><sub>XY</sub> and <em>F</em><sub>ST</sub> in 100Kb windows
+with a 25Kb step along our chromosome of interest (chromosome 8
+here).</p>
+<p>Let’s plot our statistics to get a better idea of what is going on
+here. We will start with <em>F</em><sub>ST</sub>:</p>
 <pre class="r"><code># fst
 ggplot(house_bac, aes(mid, fst_bac_house)) + geom_line()</code></pre>
 <p>Next we will look at <em>d</em><sub>XY</sub></p>
 <pre class="r"><code># dxy
 ggplot(house_bac, aes(mid, dxy_bac_house)) + geom_line()</code></pre>
-<p>Clearly there is something going on at the centre of the chromosome here. We should also look at the estimates of pi to see if there is anything we can learn from that too. Since we want to plot pi from both species on the same plot, it requires a bit more leg work. First we need to use the <code>gather</code> function to reshape the data so that we can plot it.</p>
+<p>Clearly there is something going on at the centre of the chromosome
+here. We should also look at the estimates of pi to see if there is
+anything we can learn from that too. Since we want to plot pi from both
+species on the same plot, it requires a bit more leg work. First we need
+to use the <code>gather</code> function to reshape the data so that we
+can plot it.</p>
 <pre class="r"><code># pi
 # first gather the data
 pi &lt;- house_bac %&gt;%
@@ -725,22 +903,27 @@ pi &lt;- house_bac %&gt;%
   pivot_longer(cols = contains(&quot;pi&quot;), names_to = &quot;species&quot;, values_to = &quot;pi&quot;)
 # then plot it
 ggplot(pi, aes(mid, pi, colour = species)) + geom_line()</code></pre>
-<p>pi also shows a large drop in the level of diversity at the middle of the chromosome. This suggests an area of reduced recombination, most likely caused by the presence of the centromere. This can also explain the largest <em>F</em><sub>ST</sub> peak present in the data. This suggests we should try an alternative approach.</p>
+<p>pi also shows a large drop in the level of diversity at the middle of
+the chromosome. This suggests an area of reduced recombination, most
+likely caused by the presence of the centromere. This can also explain
+the largest <em>F</em><sub>ST</sub> peak present in the data. This
+suggests we should try an alternative approach.</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
-<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.1.2 (2021-11-01)
+<pre><code>R version 4.2.1 (2022-06-23)
 Platform: x86_64-apple-darwin17.0 (64-bit)
-Running under: macOS Catalina 10.15.7
+Running under: macOS Big Sur ... 10.16
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
+BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib
 
 locale:
 [1] en_GB.UTF-8/en_GB.UTF-8/en_GB.UTF-8/C/en_GB.UTF-8/en_GB.UTF-8
@@ -749,18 +932,20 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] workflowr_1.6.2
+[1] workflowr_1.7.0
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.7       whisker_0.4      knitr_1.36       magrittr_2.0.1  
- [5] R6_2.5.1         rlang_0.4.12     fastmap_1.1.0    fansi_0.5.0     
- [9] stringr_1.4.0    tools_4.1.2      xfun_0.28        utf8_1.2.2      
-[13] git2r_0.28.0     jquerylib_0.1.4  htmltools_0.5.2  ellipsis_0.3.2  
-[17] rprojroot_2.0.2  yaml_2.2.1       digest_0.6.28    tibble_3.1.5    
-[21] lifecycle_1.0.1  crayon_1.4.2     later_1.3.0      vctrs_0.3.8     
-[25] promises_1.2.0.1 fs_1.5.0         glue_1.5.0       evaluate_0.14   
-[29] rmarkdown_2.11   stringi_1.7.5    compiler_4.1.2   pillar_1.6.4    
-[33] httpuv_1.6.3     pkgconfig_2.0.3 </code></pre>
+ [1] Rcpp_1.0.9       compiler_4.2.1   pillar_1.8.1     bslib_0.4.0     
+ [5] later_1.3.0      git2r_0.30.1     jquerylib_0.1.4  tools_4.2.1     
+ [9] getPass_0.2-2    digest_0.6.29    jsonlite_1.8.0   evaluate_0.16   
+[13] tibble_3.1.8     lifecycle_1.0.1  pkgconfig_2.0.3  rlang_1.0.4     
+[17] cli_3.3.0        rstudioapi_0.14  yaml_2.3.5       xfun_0.32       
+[21] fastmap_1.1.0    httr_1.4.4       stringr_1.4.1    knitr_1.40      
+[25] fs_1.5.2         vctrs_0.4.1      sass_0.4.2       rprojroot_2.0.3 
+[29] glue_1.6.2       R6_2.5.1         processx_3.7.0   fansi_1.0.3     
+[33] rmarkdown_2.16   callr_3.7.2      magrittr_2.0.3   whisker_0.4     
+[37] ps_1.7.1         promises_1.2.0.1 htmltools_0.5.3  httpuv_1.6.5    
+[41] utf8_1.2.2       stringi_1.7.8    cachem_1.0.6    </code></pre>
 </div>
 </div>
 </div>
@@ -768,7 +953,7 @@ loaded via a namespace (and not attached):
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
 TeX fonts only; see
-http://docs.mathjax.org/en/latest/configuration.html.  This will make
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
 the presentation more consistent at the cost of the webpage sometimes
 taking slightly longer to load. Note that this only works because the
 footer is added to webpages before the MathJax javascript. -->

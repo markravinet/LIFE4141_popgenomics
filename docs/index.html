@@ -13,7 +13,7 @@
 
 <title>Home</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -35,7 +35,7 @@
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
-<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
 <style type="text/css">
 div.section {
@@ -72,6 +72,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -92,6 +93,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -149,11 +153,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -244,7 +252,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -287,7 +295,9 @@ $(document).ready(function () {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -296,7 +306,9 @@ $(document).ready(function () {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -305,17 +317,27 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-11-26
+<strong>Last updated:</strong> 2022-10-19
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
 </p>
 <p>
-<strong>Knit directory:</strong> <code>LIFE4141_popgenomics/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+<strong>Knit directory:</strong> <code>LIFE4141_popgenomics/</code>
+<span class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
 </p>
 <p>
-This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
-  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
 </p>
 <hr>
 </div>
@@ -324,43 +346,72 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommarkravinetLIFE4141popgenomicstreebe7c369117fb81050b4c26af946291f1446ea78dtargetblankbe7c369a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/markravinet/LIFE4141_popgenomics/tree/be7c369117fb81050b4c26af946291f1446ea78d" target="_blank">be7c369</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommarkravinetLIFE4141popgenomicstreedb46e57c6a9372a59d68af849a72d9652bde2603targetblankdb46e57a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/markravinet/LIFE4141_popgenomics/tree/db46e57c6a9372a59d68af849a72d9652bde2603" target="_blank">db46e57</a>
+</a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcommarkravinetLIFE4141popgenomicstreebe7c369117fb81050b4c26af946291f1446ea78dtargetblankbe7c369a" class="panel-collapse collapse">
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcommarkravinetLIFE4141popgenomicstreedb46e57c6a9372a59d68af849a72d9652bde2603targetblankdb46e57a"
+class="panel-collapse collapse">
 <div class="panel-body">
 <p>
-Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/markravinet/LIFE4141_popgenomics/tree/be7c369117fb81050b4c26af946291f1446ea78d" target="_blank">be7c369</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version
+<a href="https://github.com/markravinet/LIFE4141_popgenomics/tree/db46e57c6a9372a59d68af849a72d9652bde2603" target="_blank">db46e57</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
 </p>
 <p>
-Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
 </p>
 <pre><code>
 Ignored files:
     Ignored:    .DS_Store
+    Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  LIFE4141_popgenomics/
 
 Unstaged changes:
     Deleted:    analysis/practical2.md
 
 </code></pre>
 <p>
-Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
 </p>
 </div>
 </div>
@@ -371,7 +422,11 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <div id="versions" class="tab-pane fade">
 
 <p>
-These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/index.Rmd</code>) and HTML (<code>docs/index.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/index.Rmd</code>) and HTML
+(<code>docs/index.html</code>) files. If you’ve configured a remote Git
+repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
+in the table below to view the files as they were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -395,6 +450,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/markravinet/LIFE4141_popgenomics/blob/db46e57c6a9372a59d68af849a72d9652bde2603/analysis/index.Rmd" target="_blank">db46e57</a>
+</td>
+<td>
+markravinet
+</td>
+<td>
+2022-10-19
+</td>
+<td>
+Publish initial files for my project
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/markravinet/LIFE4141_popgenomics/96d7fb39e45cd793426fb1d9168bd2c8c5f37c4c/docs/index.html" target="_blank">96d7fb3</a>
+</td>
+<td>
+markravinet
+</td>
+<td>
+2021-11-26
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -659,23 +748,38 @@ Start workflowr project.
 </div>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>Welcome to the website for our LIFE4141 population genomics practical. Today we are going to:</p>
+<p>Welcome to the website for our LIFE4141 population genomics
+practical. Today we are going to:</p>
 <ol style="list-style-type: decimal">
-<li><a href="practical1.html">Perform a PCA on some haplochromine cichlid data</a></li>
-<li><a href="practical2.html">Carry out a sliding window-analysis of <em>F</em><sub>ST</sub> and <em>d</em><sub>XY</sub> on a dataset of <em>Passer</em> sparrows</a></li>
-<li><a href="practical3.html">Calculate haplotype homozygosity statistics between two <em>Passer</em> sparrow species</a></li>
-<li><a href="practical4.html">Use this pairwise analysis to identify candidate genes in the genome</a></li>
+<li><a href="practical1.html">Perform a PCA on some haplochromine
+cichlid data</a></li>
+<li><a href="practical2.html">Carry out a sliding window-analysis of
+<em>F</em><sub>ST</sub> and <em>d</em><sub>XY</sub> on a dataset of
+<em>Passer</em> sparrows</a></li>
+<li><a href="practical3.html">Calculate haplotype homozygosity
+statistics between two <em>Passer</em> sparrow species</a></li>
+<li><a href="practical4.html">Use this pairwise analysis to identify
+candidate genes in the genome</a></li>
 </ol>
 <div id="working-with-r-studio-server" class="section level3">
 <h3>Working with R Studio Server</h3>
-<p>In order to simplify things for the tutorial and to ensure we all have a common <code>R</code> installation, we will be using the R Studio Server. This is very straightforward to use and can be done via a browser (when you are logged in to the University of Nottingham VPN or inside the firewall).</p>
+<p>In order to simplify things for the tutorial and to ensure we all
+have a common <code>R</code> installation, we will be using the R Studio
+Server. This is very straightforward to use and can be done via a
+browser (when you are logged in to the University of Nottingham VPN or
+inside the firewall).</p>
 <ol style="list-style-type: decimal">
 <li>Open a browser</li>
-<li>Navigate to this address: [<a href="http://10.102.161.9:8787" class="uri">http://10.102.161.9:8787</a>]</li>
+<li>Navigate to this address: [<a href="http://10.102.161.8:8787"
+class="uri">http://10.102.161.8:8787</a>]</li>
 <li>When prompted, enter your username and password.</li>
 </ol>
-<p><strong>I will give you your password during the practical - it is not the same as your university one</strong></p>
-<p>Your RStudio working directory will be your home on the CycleCloud cluster. I have also prepared some R scripts for you to use if you wish. In order to get these, type the following when you are logged in to the cluster via an ssh terminal:</p>
+<p><strong>I will give you your password during the practical - it is
+not the same as your university one</strong></p>
+<p>Your RStudio working directory will be your home on the CycleCloud
+cluster. I have also prepared some R scripts for you to use if you wish.
+In order to get these, type the following when you are logged in to the
+cluster via an ssh terminal:</p>
 <pre class="shell"><code># move to home directory
 cd ~
 # copy Rscripts
@@ -686,7 +790,7 @@ cp /shared/mark/Rscripts/*.R .</code></pre>
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
 TeX fonts only; see
-http://docs.mathjax.org/en/latest/configuration.html.  This will make
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
 the presentation more consistent at the cost of the webpage sometimes
 taking slightly longer to load. Note that this only works because the
 footer is added to webpages before the MathJax javascript. -->
